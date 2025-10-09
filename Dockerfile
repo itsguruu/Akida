@@ -1,25 +1,32 @@
 # Use a modern and supported Node.js image
 FROM node:18-bullseye
 
+# Use root for installing system packages
+USER root
+
+# Update system and install dependencies
+RUN apt-get update && \
+    apt-get install -y ffmpeg webp git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /app
 
-# Copy package files first for efficient caching
+# Copy dependency files first for better caching
 COPY package*.json ./
 
-# Install dependencies
+# Install npm dependencies
 RUN npm install -g pm2 && npm install
 
-# Install required system packages
-RUN apt-get update && \
-    apt-get install -y ffmpeg webp git && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy the rest of the source code
+# Copy the rest of your source code
 COPY . .
 
-# Expose a port (needed by Render)
+# Expose port (required by Render)
 EXPOSE 3000
 
-# Run your bot using PM2
+# Set environment variable
+ENV NODE_ENV=production
+
+# Start your bot
 CMD ["pm2-runtime", "index.js", "--name", "Akida"]
