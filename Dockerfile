@@ -1,32 +1,25 @@
-# Use a modern and supported Node.js image
-FROM node:18-bullseye
-
-# Use root for installing system packages
-USER root
-
-# Update system and install dependencies
-RUN apt-get update && \
-    apt-get install -y ffmpeg webp git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Base image with Node.js 18 (recommended for Baileys)
+FROM node:18-buster
 
 # Set working directory
-WORKDIR /app
+WORKDIR /home/node/app
 
-# Copy dependency files first for better caching
-COPY package*.json ./
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y git ffmpeg wget curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install npm dependencies
-RUN npm install -g pm2 && npm install
-
-# Copy the rest of your source code
+# Copy project files
 COPY . .
 
-# Expose port (required by Render)
-EXPOSE 3000
+# Install node modules
+RUN npm install --legacy-peer-deps
 
-# Set environment variable
-ENV NODE_ENV=production
+# Fix permission issues for node
+RUN chmod -R 777 /home/node/app
+
+# Expose Render/Express port
+EXPOSE 7860
 
 # Start your bot
-CMD ["pm2-runtime", "index.js", "--name", "Akida"]
+CMD ["node", "index.js"]
