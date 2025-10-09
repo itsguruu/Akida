@@ -1,14 +1,25 @@
-FROM node:lts-buster
-USER root
+# Use a modern and supported Node.js image
+FROM node:18-bullseye
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first for efficient caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install -g pm2 && npm install
+
+# Install required system packages
 RUN apt-get update && \
     apt-get install -y ffmpeg webp git && \
-    apt-get upgrade -y && \
     rm -rf /var/lib/apt/lists/*
-USER node
-RUN git clone https://github.com/dev-malvin/n /home/node/n
-WORKDIR /home/node/n
-RUN chmod -R 777 /home/node/n/
-RUN yarn install --network-concurrency 1
-EXPOSE 7860
-ENV NODE_ENV=production
-CMD ["npm", "start"]
+
+# Copy the rest of the source code
+COPY . .
+
+# Expose a port (needed by Render)
+EXPOSE 3000
+
+# Run your bot using PM2
+CMD ["pm2-runtime", "index.js", "--name", "Akida"]
