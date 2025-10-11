@@ -1,81 +1,84 @@
 const { malvin } = require("../malvin");
 const config = require("../settings");
-const { runtime } = require("../lib/functions");
-const moment = require("moment");
+const os = require("os");
+const { runtime } = require('../lib/functions');
+const moment = require("moment-timezone");
+const axios = require("axios");
 
-const ALIVE_IMG = "https://files.catbox.moe/pu5n2m.jpg"; // Elegant metallic AKIDA background
+// Primary & fallback alive image
+const ALIVE_IMG = "https://files.catbox.moe/r5d1tp.jpg";  // Your main one
+const FALLBACK_IMG = "https://files.catbox.moe/r5d1tp.jpg";            // Backup if main fails
 
 malvin({
     pattern: "alive",
-    alias: ["alive2", "status"],
-    desc: "Check AKIDA bot's status and uptime",
+    desc: "Check if AKIDA bot is running smoothly",
     category: "main",
-    react: "💫",
+    react: "💠",
     filename: __filename
 }, async (malvin, mek, m, { reply, from }) => {
     try {
         const pushname = m.pushName || "User";
-        const now = moment();
-        const currentTime = now.format("HH:mm:ss");
+        const timezone = "Africa/Nairobi";
+        const now = moment().tz(timezone);
+        const currentTime = now.format("hh:mm:ss A");
         const currentDate = now.format("dddd, MMMM Do YYYY");
         const uptime = runtime(process.uptime());
+        const owner = config.OWNER_NAME || "GURU";
 
-        // Stylish small-caps formatter
-        const toTinyCap = (text) =>
-            text.split("").map((char) => {
-                const tiny = {
-                    a: "ᴀ", b: "ʙ", c: "ᴄ", d: "ᴅ", e: "ᴇ", f: "ғ", g: "ɢ",
-                    h: "ʜ", i: "ɪ", j: "ᴊ", k: "ᴋ", l: "ʟ", m: "ᴍ", n: "ɴ",
-                    o: "ᴏ", p: "ᴘ", q: "ǫ", r: "ʀ", s: "s", t: "ᴛ", u: "ᴜ",
-                    v: "ᴠ", w: "ᴡ", x: "x", y: "ʏ", z: "ᴢ"
-                };
-                return tiny[char.toLowerCase()] || char;
-            }).join("");
+        // Small stylizer
+        const stylize = (text) => text.split('').map(c => {
+            const tiny = {
+                A:'ᴀ', B:'ʙ', C:'ᴄ', D:'ᴅ', E:'ᴇ', F:'ғ', G:'ɢ', H:'ʜ', I:'ɪ',
+                J:'ᴊ', K:'ᴋ', L:'ʟ', M:'ᴍ', N:'ɴ', O:'ᴏ', P:'ᴘ', Q:'ǫ', R:'ʀ',
+                S:'s', T:'ᴛ', U:'ᴜ', V:'ᴠ', W:'ᴡ', X:'x', Y:'ʏ', Z:'ᴢ'
+            };
+            return tiny[c.toUpperCase()] || c;
+        }).join('');
 
-        // Random emoji for lively look
-        const aliveEmoji = ["⚙️", "💠", "🚀", "🌟", "💎", "🛰️", "💫", "🔥"];
-        const pickEmoji = aliveEmoji[Math.floor(Math.random() * aliveEmoji.length)];
+        const caption = `
+╭━━━〔 💠 ${stylize("AKIDA Alive")} 💠 〕━━━⊷
+┃ 👋 ${stylize("Hello")}, *${pushname}*!
+┃ 🕓 ${stylize("Time")}: ${currentTime}
+┃ 📅 ${stylize("Date")}: ${currentDate}
+┃ ⚙️ ${stylize("Mode")}: ${config.MODE}
+┃ 🧭 ${stylize("Uptime")}: ${uptime}
+┃ 💎 ${stylize("Owner")}: ${owner}
+┃ 🔗 ${stylize("Channel")}: https://shorturl.at/DYEi0
+┃ 🤖 ${stylize("Version")}: ${config.version || "2.0.0"}
+╰━━━━━━━━━━━━━━━━━━━⊷
+> ${stylize("Powering your chats with elegance and speed ✨")}
+`.trim();
 
-        // ALIVE message
-        const msg = `
-╭━━━❰ ${pickEmoji} ＡＫＩＤＡ 𝐒𝐓𝐀𝐓𝐔𝐒 ${pickEmoji} ❱━━━╮
-│ 💠 *User:* ${pushname}
-│ ⚙️ *Prefix:* ${config.PREFIX}
-│ 💻 *Mode:* ${config.MODE}
-│ ⏰ *Time:* ${currentTime}
-│ 📅 *Date:* ${currentDate}
-│ ⏱️ *Uptime:* ${uptime}
-│ 🧠 *Version:* 2.0.0
-│ 👑 *Owner:* Guru
-│ 🔗 *Channel:* https://shorturl.at/DYEi0
-╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
-
-╭─❰ 💬 𝐀𝐊𝐈𝐃𝐀 𝐑𝐄𝐒𝐏𝐎𝐍𝐒𝐄 ❱─╮
-│ 🟢 Online and fully operational
-│ 💎 Powered by Guru’s Intelligence
-│ 🌐 Always active to serve you
-╰──────────────────────────────╯
-> *ᴛʜᴇ ғᴜᴛᴜʀᴇ ɪs ᴀɪ — ᴀɴᴅ ɪᴛ's ᴀᴋɪᴅᴀ ⚙️*
-        `.trim();
-
-        // Send message with metallic style image
-        await malvin.sendMessage(from, {
-            image: { url: ALIVE_IMG },
-            caption: msg,
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363299029326322@newsletter',
-                    newsletterName: 'GURU',
-                    serverMessageId: 143
+        // Try sending main image first
+        try {
+            await malvin.sendMessage(from, {
+                image: { url: ALIVE_IMG },
+                caption,
+                contextInfo: {
+                    mentionedJid: [m.sender],
+                    forwardingScore: 999,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363299029326322@newsletter',
+                        newsletterName: 'AKIDA | GURU',
+                        serverMessageId: 143
+                    }
                 }
-            }
-        }, { quoted: mek });
+            }, { quoted: mek });
+
+        } catch (err) {
+            // fallback image if main fails
+            await malvin.sendMessage(from, {
+                image: { url: FALLBACK_IMG },
+                caption: caption + "\n\n⚠️ Primary image source unavailable, using fallback.",
+                contextInfo: {
+                    mentionedJid: [m.sender]
+                }
+            }, { quoted: mek });
+        }
 
     } catch (err) {
-        console.error("❌ Error in .alive:", err);
+        console.error("❌ Alive Command Error:", err.message);
         return reply(`❌ *Alive Command Error:*\n${err.message}`);
     }
 });
