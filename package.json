@@ -8,26 +8,23 @@
     "npm": ">=10.x"
   },
   "scripts": {
-    "start": "pm2 start index.js --deep-monitoring --attach --name Akida",
-    "stop": "pm2 stop Akida",
-    "restart": "pm2 restart Akida"
+    "start": "node index.js",
+    "pm2": "pm2 start index.js --name Akida --no-daemon"
   },
   "dependencies": {
     "@whiskeysockets/baileys": "github:EdderBot02/bail",
-     "axios": "^1.7.9",
     "@adiwajshing/keyed-db": "latest",
     "@dark-yasiya/yt-dl.js": "1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
-    "@vitalets/google-translate-api": "^9.2.1", 
-    "@dark-yasiya/scrap":"1.0.1",    
+    "@vitalets/google-translate-api": "^9.2.1",
+    "@dark-yasiya/scrap": "1.0.1",
     "acrcloud": "^1.4.0",
     "adm-zip": "^0.5.16",
-    "lolcatjs": "^2.4.1",
     "api-dylux": "latest",
-    "btch-downloader": "^2.2.9",
+    "axios": "^1.7.9",
     "better-sqlite3": "*",
+    "btch-downloader": "^2.2.9",
     "buffer": "^6.0.3",
-    "moment-timezone": "^0.6.0",
     "cheerio": "^1.0.0-rc.12",
     "crypto-digest-sync": "^1.0.0",
     "crypto-js": "latest",
@@ -43,7 +40,9 @@
     "google-tts-api": "^2.0.2",
     "javascript-obfuscator": "^4.0.0",
     "jimp": "^0.16.1",
+    "lolcatjs": "^2.4.1",
     "megajs": "^1.1.0",
+    "moment-timezone": "^0.6.0",
     "mongoose": "^8.0.0",
     "node-cache": "^5.1.1",
     "node-fetch": "^2.6.1",
@@ -53,7 +52,7 @@
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.14.0",
     "pino": "^9.7.0",
-    "pm2": "6.0.8",    
+    "pm2": "^6.0.8",
     "qrcode-reader": "^1.0.4",
     "qrcode-terminal": "^0.12.0",
     "ruhend-scraper": "8.0.3",
@@ -66,4 +65,3 @@
     "yt-search": "2.13.1"
   }
 }
-
