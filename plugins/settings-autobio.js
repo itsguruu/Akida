@@ -1,173 +1,149 @@
+/*
+⚡ Project       : AKIDA BOT
+👑 Developer     : Guru (Guru Tech Labs)
+🌍 Timezone      : Africa/Nairobi
+📦 Repository    : https://github.com/itsguruu/Akida
+📡 Channel       : https://shorturl.at/DYEi0
+🧠 Description   : Auto Bio Updater with random quotes, live Kenya time, and auto-start.
+*/
+
 const axios = require('axios');
 const config = require('../settings');
 const { malvin } = require('../malvin');
 const fs = require('fs');
 
 let bioInterval;
-const defaultBio = config.AUTO_BIO_TEXT || "ᴠɪsɪᴏɴ ᴠ| ǫᴜᴏᴛᴇ: {quote} | Time: {time}";
-const quoteApiUrl = config.QUOTE_API_URL || 'https://apis.davidcyriltech.my.id/random/quotes';
-const updateInterval = config.AUTO_BIO_INTERVAL || 30 * 1000; // Default to 30 seconds
 
-// Fallback quotes if API fails
+// Default bio pattern
+const defaultBio = config.AUTO_BIO_TEXT || 
+"⚡ ᴀᴋɪᴅᴀ | {quote} | 🇰🇪 {time}";
+
+// API and fallback
+const quoteApiUrl = config.QUOTE_API_URL || 'https://apis.davidcyriltech.my.id/random/quotes';
 const fallbackQuotes = [
-    "Stay curious, keep learning!",
-    "Dream big, work hard!",
+    "Stay curious, keep learning.",
+    "Dream big, work hard, shine brighter.",
     "The best is yet to come.",
-    "Keep it real, always.",
-    "Life is a journey, enjoy it!"
+    "Focus on progress, not perfection.",
+    "Be real. Be kind. Be Guru-level awesome."
 ];
 
-// Function to get Kenya time and date
+const updateInterval = config.AUTO_BIO_INTERVAL || 45 * 1000; // 45s
+
+// 🕒 Get Kenya time
 function getKenyaTime() {
-    const options = {
+    return new Date().toLocaleString('en-US', {
         timeZone: 'Africa/Nairobi',
         hour12: true,
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
         weekday: 'short',
         day: 'numeric',
         month: 'short',
-        year: 'numeric'
-    };
-    
-    const now = new Date();
-    const kenyaTime = now.toLocaleString('en-US', options);
-    return kenyaTime;
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    });
 }
 
+// 📡 Main command
 malvin({
     pattern: 'autobio',
-    alias: ['autoabout'],
-    desc: 'Toggle automatic bio updates with random quotes and Kenya time',
-    category: 'misc',
+    alias: ['autoabout', 'setbio'],
+    desc: 'Enable automatic WhatsApp bio updates with random quotes and Kenya time',
+    category: 'system',
     filename: __filename,
-    usage: `${config.PREFIX}autobio [on/off] [text]`
+    usage: `${config.PREFIX}autobio on/off [text]`
 }, async (malvin, mek, m, { args, reply, isOwner }) => {
-    if (!isOwner) return reply("❌ ᴏɴʟʏ ᴛʜᴇ ʙᴏᴛ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ");
+    if (!isOwner) return reply("❌ *Only the bot owner can use this command.*");
 
     const [action, ...bioParts] = args;
     const customBio = bioParts.join(' ') || defaultBio;
 
     try {
         if (action === 'on') {
-            if (config.AUTO_BIO === "true") {
-                return reply("ℹ️ ᴀᴜᴛᴏ-ʙɪᴏ ɪs ᴀʟʀᴇᴀᴅʏ ᴇɴᴀʙʟᴇᴅ");
-            }
-
+            if (config.AUTO_BIO === "true") return reply("⚙️ Auto-bio is already enabled.");
             config.AUTO_BIO = "true";
             config.AUTO_BIO_TEXT = customBio;
-            // Optionally persist config
-            // fs.writeFileSync('./settings.json', JSON.stringify(config, null, 2));
-
             startAutoBio(malvin, customBio);
-            return reply(`✅ ᴀᴜᴛᴏ-ʙɪᴏ ᴇɴᴀʙʟᴇᴅ\nᴄᴜʀʀᴇɴᴛ ᴛᴇxᴛ: "${customBio}"`);
+            return reply(`✅ *Auto-Bio Enabled!*\n📝 Current: "${customBio}"`);
 
         } else if (action === 'off') {
-            if (config.AUTO_BIO !== "true") {
-                return reply("ℹ️ ᴀᴜᴛᴏ-ʙɪᴏ ɪs ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ");
-            }
-
+            if (config.AUTO_BIO !== "true") return reply("⚙️ Auto-bio is already disabled.");
             config.AUTO_BIO = "false";
             stopAutoBio();
-            // Optionally persist config
-            // fs.writeFileSync('./settings.json', JSON.stringify(config, null, 2));
-            return reply("✅ ᴀᴜᴛᴏ-ʙɪᴏ ᴅɪsᴀʙʟᴇᴅ");
+            return reply("🛑 *Auto-Bio Disabled.*");
 
         } else {
-            return reply(
-                `╭━━〔 🤖 *ᴀᴜᴛᴏ-ʙɪᴏ* 〕━━┈⊷\n` +
-                `│\n` +
-                `│ 📜 *ᴜsᴀɢᴇ:*\n` +
-                `│ ➸ ${config.PREFIX}autobio on [text] - ᴇɴᴀʙʟᴇ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴛᴇxᴛ\n` +
-                `│ ➸ ${config.PREFIX}autobio off - ᴅɪsᴀʙʟᴇ ᴀᴜᴛᴏ-ʙɪᴏ\n` +
-                `│\n` +
-                `│ 🔖 *ᴘʟᴀᴄᴇʜᴏʟᴅᴇʀs:*\n` +
-                `│ ➸ {quote} - ʀᴀɴᴅᴏᴍ ᴏᴜᴏᴛᴇ\n` +
-                `│ ➸ {time} - ᴋᴇɴʏᴀ ᴛɪᴍᴇ & ᴅᴀᴛᴇ\n` +
-                `│\n` +
-                `│ 💡 *sᴛᴀᴛᴜs:* ${config.AUTO_BIO === "true" ? 'ON' : 'OFF'}\n` +
-                `│ 📝 *ᴛᴇxᴛ:* "${config.AUTO_BIO_TEXT || defaultBio}"\n` +
-                `│ 🕒 *ᴋᴇɴʏᴀ ᴛɪᴍᴇ:* ${getKenyaTime()}\n` +
-                `╰──────────────┈⊷`
-            );
+            const menuText = `
+╭━〔 ⚡ *Aᴋɪᴅᴀ Aᴜᴛᴏ-ʙɪᴏ* ⚡ 〕━⊷
+│ 💡 Usage:
+│ • ${config.PREFIX}autobio on [text] – Enable
+│ • ${config.PREFIX}autobio off – Disable
+│
+│ 🏷 Placeholders:
+│ • {quote} → random quote
+│ • {time} → Kenya time
+│
+│ 🔄 Status: ${config.AUTO_BIO === "true" ? "🟢 ON" : "🔴 OFF"}
+│ 📝 Bio Text: "${config.AUTO_BIO_TEXT || defaultBio}"
+│ 🕒 Time: ${getKenyaTime()}
+│
+│ 👑 Developer: *Guru | AKIDA Tech Labs*
+│ 🔗 Channel: https://shorturl.at/DYEi0
+╰━━━━━━━━━━━━━━━━━━━━━━━⊷`.trim();
+
+            return reply(menuText);
         }
     } catch (error) {
-        console.error('❌ Auto-bio error:', error.message);
-        return reply("❌ ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘᴅᴀᴛᴇ ᴀᴜᴛᴏ-ʙɪᴏ sᴇᴛᴛɪɴɢs");
+        console.error('AutoBio Error:', error);
+        reply("❌ Failed to update Auto-Bio settings.");
     }
 });
 
-// Fetch random quote
+// 🧠 Get random quote
 async function fetchQuote() {
     try {
-        const response = await axios.get(quoteApiUrl);
-        if (response.status === 200 && response.data.content) {
-            return response.data.content;
-        }
-        throw new Error('Invalid quote API response');
-    } catch (error) {
-        console.error('Quote fetch error:', error.message);
+        const res = await axios.get(quoteApiUrl);
+        return res.data?.content || fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
+    } catch {
         return fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
     }
 }
 
-// Start auto-bio updates
+// 🚀 Start updater
 async function startAutoBio(malvin, bioText) {
     stopAutoBio();
 
-    // Update immediately on start
-    try {
-        const quote = await fetchQuote();
-        const kenyaTime = getKenyaTime();
-        const formattedBio = bioText
-            .replace('{quote}', quote)
-            .replace('{time}', kenyaTime);
-        await malvin.updateProfileStatus(formattedBio);
-    } catch (error) {
-        console.error('❌ Initial bio update error:', error.message);
-    }
-
-    // Set interval for regular updates
-    bioInterval = setInterval(async () => {
+    async function updateBio() {
         try {
             const quote = await fetchQuote();
-            const kenyaTime = getKenyaTime();
-            const formattedBio = bioText
-                .replace('{quote}', quote)
-                .replace('{time}', kenyaTime);
-            await malvin.updateProfileStatus(formattedBio);
-        } catch (error) {
-            console.error('❌ Bio update error:', error.message);
-            setTimeout(async () => {
-                try {
-                    const quote = await fetchQuote();
-                    const kenyaTime = getKenyaTime();
-                    const formattedBio = bioText
-                        .replace('{quote}', quote)
-                        .replace('{time}', kenyaTime);
-                    await malvin.updateProfileStatus(formattedBio);
-                } catch (retryError) {
-                    console.error('❌ Bio retry error:', retryError.message);
-                    stopAutoBio();
-                }
-            }, 5000);
+            const time = getKenyaTime();
+            const newBio = bioText.replace('{quote}', quote).replace('{time}', time);
+            await malvin.updateProfileStatus(newBio);
+            console.log(`✅ Updated Bio → ${newBio}`);
+        } catch (err) {
+            console.error("❌ Bio update failed:", err.message);
         }
-    }, updateInterval);
-}
-
-// Stop auto-bio updates
-function stopAutoBio() {
-    if (bioInterval) {
-        clearInterval(bioInterval);
-        bioInterval = null;
     }
+
+    await updateBio();
+    bioInterval = setInterval(updateBio, updateInterval);
 }
 
-// Initialize auto-bio if enabled
-module.exports.init = (malvin) => {
-    if (config.AUTO_BIO === "true") {
+// 🧩 Stop updater
+function stopAutoBio() {
+    if (bioInterval) clearInterval(bioInterval);
+    bioInterval = null;
+}
+
+// ⚙️ Auto-enable when bot starts or reconnects
+module.exports.init = async (malvin) => {
+    console.log("🚀 Checking auto-bio settings...");
+    if (config.AUTO_BIO === "true" || config.AUTO_BIO === true) {
         const bioText = config.AUTO_BIO_TEXT || defaultBio;
-        startAutoBio(malvin, bioText);
+        console.log("✅ Auto-Bio is enabled. Starting updater...");
+        await startAutoBio(malvin, bioText);
+    } else {
+        console.log("ℹ️ Auto-Bio is disabled in settings. Use '.autobio on' to enable.");
     }
 };
