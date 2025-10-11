@@ -11,96 +11,88 @@ malvin({
 }, async (malvin, mek, m, { from, reply }) => {
     try {
         const dec = `
-╭━❰ ⚡ 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃 𝐂𝐌𝐃 ⚡ ❱━╮
-│ • .play      - Download audio from YouTube
-│ • .song      - Download song from YouTube
-│ • .apk       - Download APK from Play Store
-│ • .video     - Download video from YouTube
-│ • .fb        - Download video from Facebook
-│ • .tk        - Download video from TikTok
-│ • .ig        - Download video from Instagram
-│ • .gdrive    - Download files from Google Drive
-│ • .twitter   - Download video from Twitter
-│ • .img       - Download image
-│ • .drama     - Download full episode video
-│ • .play2     - Download audio (alt)
-│ • .video2    - Download video (alt)
-│ • .baiscope  - Download video from Baiscope
-│ • .mfire     - Download MediaFire files
-╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+╭━━━〘 ⚙️ 𝐀𝐊𝐈𝐃𝐀 𝐒𝐘𝐒𝐓𝐄𝐌 ⚙️ 〙━━━╮
+│   💠 *ᴏᴡɴᴇʀ:* GURU
+│   ⚡ *ᴠᴇʀꜱɪᴏɴ:* 2.0.0
+│   📱 *ᴘʀᴇғɪx:* ${config.PREFIX}
+│   🪄 *ᴍᴏᴅᴇ:* ${config.MODE}
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ 🌸 𝐀𝐍𝐈𝐌𝐄 𝐂𝐌𝐃 🌸 ❱━╮
-│ • .yts        - Search YouTube videos
-│ • .king       - Info about "King"
-│ • .dog        - Random dog images
-│ • .anime      - Anime pictures
-│ • .animegirl  - Anime girl pictures
-│ • .loli       - Romantic anime pics
-╰━━━━━━━━━━━━━━━━━━━━╯
+╭⟢〘 ⚡ 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃 𝐂𝐌𝐃 ⚡ 〙⟣
+│ ⦿ .play — YouTube audio
+│ ⦿ .song — Song from YouTube
+│ ⦿ .video — YouTube video
+│ ⦿ .fb — Facebook video
+│ ⦿ .ig — Instagram video
+│ ⦿ .tk — TikTok video
+│ ⦿ .mfire — MediaFire files
+│ ⦿ .gdrive — Google Drive files
+│ ⦿ .apk — Download APK
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ ℹ️ 𝐈𝐍𝐅𝐎 𝐂𝐌𝐃 ℹ️ ❱━╮
-│ • .alive      - Check if bot is online
-│ • .ping       - Check bot speed
-│ • .menu       - Show main menu
-│ • .menu2      - Alternate menu
-│ • .ai         - Chat with AI bot
-│ • .system     - Bot system status
-│ • .owner      - Owner info
-│ • .status     - Bot runtime info
-│ • .about      - About this bot
-│ • .list       - Show command list
-│ • .script     - Bot repository link
-╰━━━━━━━━━━━━━━━━━━━━╯
+╭⟢〘 🌸 𝐀𝐍𝐈𝐌𝐄 𝐂𝐌𝐃 🌸 〙⟣
+│ ⦿ .anime — Random anime
+│ ⦿ .animegirl — Anime girls
+│ ⦿ .loli — Romantic anime pics
+│ ⦿ .dog — Dog images
+│ ⦿ .king — Anime info
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ 🎲 𝐎𝐓𝐇𝐄𝐑 𝐂𝐌𝐃 🎲 ❱━╮
-│ • .joke         - Random joke
-│ • .fact         - Random fact
-│ • .githubstalk  - GitHub user info
-│ • .gpass        - Generate strong password
-│ • .hack         - Prank friends
-│ • .srepo        - Search repos
-│ • .define       - Search word meanings
-╰━━━━━━━━━━━━╯
+╭⟢〘 ℹ️ 𝐈𝐍𝐅𝐎 𝐂𝐌𝐃 ℹ️ 〙⟣
+│ ⦿ .alive — Bot status
+│ ⦿ .ping — Response speed
+│ ⦿ .menu — Main menu
+│ ⦿ .ai — Chat with AI
+│ ⦿ .status — System status
+│ ⦿ .owner — Owner info
+│ ⦿ .list — Full command list
+│ ⦿ .script — Bot repository
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ 👥 𝐆𝐑𝐎𝐔𝐏 𝐂𝐌𝐃 👥 ❱━╮
-│ • .mute        - Mute group
-│ • .unmute      - Unmute group
-│ • .left        - Bot leaves group
-│ • .remove      - Remove member
-│ • .add         - Add member
-│ • .kick        - Kick user
-│ • .kickall     - Remove all members
-│ • .promote     - Make admin
-│ • .demote      - Remove admin
-│ • .tagall      - Mention all
-│ • .setgoodbye  - Leave message
-│ • .setwelcome  - Welcome message
-│ • .ginfo       - Group info
-╰━━━━━━━━━━━━╯
+╭⟢〘 🎮 𝐅𝐔𝐍 & 𝐎𝐓𝐇𝐄𝐑 🎮 〙⟣
+│ ⦿ .joke — Random joke
+│ ⦿ .fact — Random fact
+│ ⦿ .githubstalk — GitHub user info
+│ ⦿ .gpass — Generate password
+│ ⦿ .define — Word meaning
+│ ⦿ .hack — Prank friend
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ 👑 𝐎𝐖𝐍𝐄𝐑 𝐂𝐌𝐃 👑 ❱━╮
-│ • .update    - Update bot version
-│ • .restart   - Restart bot
-│ • .settings  - View settings
-│ • .block     - Block user
-│ • .unblock   - Unblock user
-│ • .shutdown  - Shutdown bot
-│ • .setpp     - Update profile pic
-╰━━━━━━━━━━━━╯
+╭⟢〘 👥 𝐆𝐑𝐎𝐔𝐏 𝐂𝐌𝐃 👥 〙⟣
+│ ⦿ .mute — Mute group
+│ ⦿ .unmute — Unmute
+│ ⦿ .tagall — Mention all
+│ ⦿ .add — Add member
+│ ⦿ .kick — Kick user
+│ ⦿ .promote — Admin role
+│ ⦿ .demote — Remove admin
+│ ⦿ .setwelcome — Welcome msg
+│ ⦿ .setgoodbye — Goodbye msg
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭━❰ 🔄 𝐂𝐎𝐍𝐕𝐄𝐑𝐓 𝐂𝐌𝐃 🔄 ❱━╮
-│ • .sticker  - Photo to sticker
-│ • .tts      - Text to speech
-│ • .trt      - Change bot language
-╰━━━━━━━━━━━━╯
+╭⟢〘 👑 𝐎𝐖𝐍𝐄𝐑 𝐂𝐌𝐃 👑 〙⟣
+│ ⦿ .update — Update bot
+│ ⦿ .restart — Restart
+│ ⦿ .shutdown — Shutdown
+│ ⦿ .settings — View settings
+│ ⦿ .block — Block user
+│ ⦿ .unblock — Unblock
+│ ⦿ .setpp — Change profile pic
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 
-${config.DESCRIPTION || ""}
+╭⟢〘 🔄 𝐂𝐎𝐍𝐕𝐄𝐑𝐓 𝐂𝐌𝐃 🔄 〙⟣
+│ ⦿ .sticker — Photo to sticker
+│ ⦿ .tts — Text to speech
+│ ⦿ .trt — Translate text
+╰━━━━━━━━━━━━━━━━━━━━━━╯
+
+> 🪶 𝘗𝘰𝘸𝘦𝘳𝘦𝘥 𝘣𝘺 𝐆𝐔𝐑𝐔 × 𝐀𝐊𝐈𝐃𝐀 ʙᴏᴛ
         `.trim();
 
         await malvin.sendMessage(
             from,
             {
-                image: { url: "https://url.bwmxmd.online/Adams.h0gop5c7.jpeg" },
+                image: { url: config.MENU_IMAGE_URL || "https://files.catbox.moe/your_akida_logo.png" },
                 caption: dec,
                 contextInfo: {
                     mentionedJid: [m.sender],
@@ -108,7 +100,7 @@ ${config.DESCRIPTION || ""}
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: '120363299029326322@newsletter',
-                        newsletterName: '𝖒𝖆𝖗𝖎𝖘𝖊𝖑',
+                        newsletterName: 'GURU',
                         serverMessageId: 143
                     }
                 }
