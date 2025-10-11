@@ -28,7 +28,7 @@ const emojiByCategory = {
   wallpapers: '🖼️', whatsapp: '📱'
 };
 
-// Random backgrounds (you can edit or add your own)
+// Random dynamic backgrounds
 const backgroundImages = [
   'https://url.bwmxmd.online/Adams.zjrmnw18.jpeg',
   'https://telegra.ph/file/2ccf21b77a7b350d1b872.jpg',
@@ -64,7 +64,7 @@ malvin({
 
     // Menu header
     let menu = `
-╭═══〘 *${toUpperStylized('Akida Bot Menu')}* 〙═══╮
+╭═══〘 ✨ *${toUpperStylized('Akida Bot Menu')}* ✨ 〙═══╮
 │ 👤 *User:* @${sender.split('@')[0]}
 │ ⚙️ *Mode:* ${config.MODE}
 │ 🕒 *Time:* ${time}
@@ -72,8 +72,8 @@ malvin({
 │ ⏱️ *Runtime:* ${uptime()}
 │ 🧩 *Plugins:* ${commands.length}
 │ 💫 *Prefix:* ${config.PREFIX}
-│ 👑 *Owner:* ${config.OWNER_NAME}
-│ 🧠 *Dev:* Guru
+│ 👑 *Owner:* GURU
+│ 🧠 *Dev:* GURU
 │ 🚀 *Version:* 2.0.0
 ╰═════════════════════╯
 `;
@@ -118,7 +118,7 @@ malvin({
           forwardedNewsletterMessageInfo: {
             newsletterJid:
               config.NEWSLETTER_JID || '120363299029326322@newsletter',
-            newsletterName: config.OWNER_NAME || 'Akida Updates',
+            newsletterName: 'GURU',
             serverMessageId: 143
           }
         }
