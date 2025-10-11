@@ -256,7 +256,32 @@ async function connectToWA() {
       }
     } else if (connection === "open") {
       console.log(chalk.green("[ 🤖 ] Akida Connected ✅"));
+// 🧠 AUTO BIO UPDATE SYSTEM
+async function autoUpdateBio(malvin) {
+  try {
+    const uptime = () => {
+      let sec = process.uptime();
+      let h = Math.floor(sec / 3600);
+      let m = Math.floor((sec % 3600) / 60);
+      return `${h}h ${m}m`;
+    };
 
+    const bioMessage = `🤖 AKIDA BOT | ⚙️ Online | 🕒 Uptime: ${uptime()} | 👑 By GURU`;
+
+    await malvin.updateProfileStatus(bioMessage);
+    console.log(chalk.green(`[ ✅ ] Bio updated: ${bioMessage}`));
+
+    // Re-update every 5 minutes automatically
+    setInterval(async () => {
+      const updatedBio = `🤖 AKIDA BOT | ⚙️ Online | 🕒 Uptime: ${uptime()} | 👑 By GURU`;
+      await malvin.updateProfileStatus(updatedBio);
+      console.log(chalk.cyan(`[ 🔄 ] Auto Bio Refreshed: ${updatedBio}`));
+    }, 5 * 60 * 1000);
+
+  } catch (err) {
+    console.error(chalk.red(`[ ❌ ] Failed to update bio: ${err.message}`));
+  }
+}
       // Load plugins
       const pluginPath = path.join(__dirname, "plugins");
       try {
