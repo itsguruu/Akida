@@ -32,7 +32,7 @@ malvin({
 ┃ ⚙️ ᴠᴇʀꜱɪᴏɴ: *${version}*
 ┃ 📆 ᴅᴀᴛᴇ: *${currentDate}*
 ┃ 🕓 ᴛɪᴍᴇ: *${currentTime}*
-┃ 🌐 ᴄʜᴀɴɴᴇʟ: https://shorturl.at/DYEi0
+┃ 🌐 ᴄʜᴀɴɴᴇʟ: https://tinyurl.com/2dgykp48
 ┃ 💬 ʙᴏᴛ: *AKIDA WHATSAPP BOT*
 ┃ 🧠 ᴅᴇᴠᴇʟᴏᴘᴇʀ: *Guru Tech Labs*
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
@@ -47,7 +47,7 @@ malvin({
       `ORG:AKIDA Tech`,
       `TITLE:Developer & Creator`,
       `TEL;type=CELL;type=VOICE;waid=${ownerNumber.replace('+', '')}:${ownerNumber}`,
-      "URL:https://shorturl.at/DYEi0",
+      "URL:https://tinyurl.com/2dgykp48",
       "END:VCARD"
     ].join('\n');
 
@@ -61,7 +61,7 @@ malvin({
 
     // Send Metallic Image + Caption
     await malvin.sendMessage(from, {
-      image: { url: "https://files.catbox.moe/pkzqz8.jpg" }, // AKIDA metallic logo
+      image: { url: "https://i.imgur.com/tAKB8DP.jpeg" }, // AKIDA metallic logo
       caption,
       contextInfo: {
         mentionedJid: [`${ownerNumber.replace('+', '')}@s.whatsapp.net`],
