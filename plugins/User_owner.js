@@ -2,7 +2,7 @@
 ⚡ Project      : AKIDA BOT
 👑 Developer    : Guru
 📦 Repository   : https://github.com/itsguruu/Akida
-📞 Channel      : https://shorturl.at/DYEi0
+📞 Channel      : https://tinyurl.com/2dgykp48
 */
 
 const { malvin } = require('../malvin');
@@ -80,7 +80,7 @@ malvin({
 ╭───────────────❖
 │ ⚡ *CONNECTED TO AKIDA BOT*
 │ 👑 Powered by: *Guru*
-│ 🌐 Channel: https://shorturl.at/DYEi0
+│ 🌐 Channel: https://tinyurl.com/2dgykp48
 │ 🕓 ${currentTime} | ${currentDate}
 ╰───────────────❖
 > *Your connection is live 🚀*
