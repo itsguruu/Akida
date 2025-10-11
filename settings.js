@@ -25,9 +25,9 @@ module.exports = {
 
   // ===== OWNER & DEVELOPER SETTINGS =====
   OWNER_NUMBER: settings.OWNER_NUMBER || process.env.OWNER_NUMBER || "254105521300", // Owner's WhatsApp number
-  OWNER_NAME: getConfig("OWNER_NAME") || process.env.OWNER_NAME || "Marisel", // Owner's name
+  OWNER_NAME: getConfig("OWNER_NAME") || process.env.OWNER_NAME || "Guru", // Owner's name
   DEV: process.env.DEV || "254105521300", // Developer's contact
-  DEVELOPER_NUMBER: '254740007567@s.whatsapp.net', // Developer's WhatsApp ID
+  DEVELOPER_NUMBER: '254108521300@s.whatsapp.net', // Developer's WhatsApp ID
   
   
   MENU_AUDIO_URL: getConfig("MENU_AUDIO_URL") || process.env.MENU_AUDIO_URL || 'https://files.catbox.moe/ay7ir0.mp3', // Menu audio
@@ -51,7 +51,7 @@ module.exports = {
   OWNER_REACT: getConfig("OWNER_REACT") || process.env.OWNER_REACT || "false", // Owner-specific reactions
   CUSTOM_REACT: getConfig("CUSTOM_REACT") || process.env.CUSTOM_REACT || "false", // Custom emoji reactions
   CUSTOM_REACT_EMOJIS: getConfig("CUSTOM_REACT_EMOJIS") || process.env.CUSTOM_REACT_EMOJIS || "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍", // Custom reaction emojis
-  STICKER_NAME: process.env.STICKER_NAME || "Mercedes", // Sticker pack name
+  STICKER_NAME: process.env.STICKER_NAME || "Akida", // Sticker pack name
   AUTO_STICKER: getConfig("AUTO_STICKER") || process.env.AUTO_STICKER || "false", // Auto-send stickers
 
   // ===== MEDIA & AUTOMATION =====
