@@ -328,17 +328,52 @@ try {
   
   const uptime = formatUptime(process.uptime());
 
-  const upMessage = `
-*┏──〔 Connected 〕───⊷*   
-*┇ Prefix: ${prefix}*
-*┇ Date: ${date}*
-*┇ Time: ${time}*
-*┇ Uptime: ${uptime}*
-*┇ Owner: ${ownername}*
-*┇ Follow Channel:*  
-*┇ https://shorturl.at/DYEi0*
-*┗──────────────⊷*
-> *Report any error to the dev*`;
+  // Random emoji animation for stylish look
+const connectEmojis = ["⚙️", "💠", "🚀", "🔮", "🌟", "✨", "🛰️", "💎"];
+const chosenEmoji = connectEmojis[Math.floor(Math.random() * connectEmojis.length)];
+
+// Fancy metallic connection message
+const upMessage = `
+╭━━━❰ ${chosenEmoji} ＡＫＩＤＡ 𝐎𝐍𝐋𝐈𝐍𝐄 ${chosenEmoji} ❱━━━╮
+│ ⚙️ *Prefix:* ${prefix}
+│ 🧠 *Mode:* ${config.MODE}
+│ 👑 *Owner:* ${ownername}
+│ 💎 *Uptime:* ${uptime}
+│ 📅 *Date:* ${date}
+│ 🕐 *Time:* ${time}
+│ 💻 *Node:* ${process.version}
+│ 🌐 *Channel:* https://shorturl.at/DYEi0
+╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+
+╭─❰ 🔰 ＳＹＳＴＥＭ ＳＴＡＴＵＳ ❱─╮
+│ 🟢 *Status:* Active & Stable
+│ ⚡ *Ping:* Optimized
+│ 🧩 *Plugins:* ${commands?.length || 'N/A'}
+│ 🔒 *Security:* Enabled
+╰────────────────────────────╯
+
+╭─❰ 📢 ＮＯＴＥ ❱─╮
+│ 💬 Report any issue to *Guru*
+│ 🔗 Follow channel for updates
+│ 💠 *Always Online — AKIDA BOT*
+╰────────────────────────────╯
+`.trim();
+
+// Send the connection message and auto-react
+try {
+  await malvin.sendMessage(jid, {
+    image: { url: "https://files.catbox.moe/pu5n2m.jpg" }, // use your metallic AKIDA image
+    caption: upMessage,
+  });
+
+  // Auto-react with style
+  await malvin.sendMessage(jid, {
+    react: { text: chosenEmoji, key: mek.key },
+  });
+} catch (err) {
+  console.error("[⚠️] Failed to send connection message:", err.message);
+  await malvin.sendMessage(jid, { text: upMessage }); // fallback to text
+}
 
   try {
     await malvin.sendMessage(jid, {
