@@ -30,7 +30,7 @@ const emojiByCategory = {
 
 // Random dynamic backgrounds
 const backgroundImages = [
-  'https://url.bwmxmd.online/Adams.zjrmnw18.jpeg',
+  'https://i.imgur.com/tAKB8DP.jpeg',
   'https://telegra.ph/file/2ccf21b77a7b350d1b872.jpg',
   'https://telegra.ph/file/7e13a0569b3d41dcf5147.jpg',
   'https://telegra.ph/file/3b6e3b4529e48c626d78b.jpg',
