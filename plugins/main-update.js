@@ -81,7 +81,7 @@ malvin({
   if (!isOwner) return reply("❌ Owner only command!");
   
   try {
-    const repoUrl = config.REPO || "https://github.com/betingrich4/Mercedes";
+    const repoUrl = config.REPO || "https://github.com/itsguruu/Akida";
     const repoApiUrl = repoUrl.replace('github.com', 'api.github.com/repos');
     
     // Get current local version
