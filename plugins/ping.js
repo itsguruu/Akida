@@ -72,74 +72,128 @@ malvin({
             formatCache.set(cacheKey, { time, date });
             if (formatCache.size > 100) formatCache.clear(); // Prevent memory leak
         }
+/*
+🔧 Project      : AKIDA BOT
+👑 Owner        : GURU
+📦 Repository   : https://github.com/itsguruu/Akida
+📞 Support      : https://wa.me/254105521300
+*/
 
-        // Uptime
-        const uptimeSeconds = Number(process.hrtime.bigint() - botStartTime) / 1e9;
-        const uptime = moment.duration(uptimeSeconds, 'seconds').humanize();
+const config = require('../settings');
+const { malvin } = require('../malvin');
+const moment = require('moment-timezone');
 
-        // Memory usage
-        const memory = process.memoryUsage();
-        const memoryUsage = `${(memory.heapUsed / 1024 / 1024).toFixed(2)}/${(memory.heapTotal / 1024 / 1024).toFixed(2)} MB`;
+// Record bot start time for uptime tracking
+const botStartTime = process.hrtime.bigint();
 
-        // System info
-        const nodeVersion = process.version;
+// Cache time format results
+const formatCache = new Map();
 
-        // Owner & bot name
-        const ownerName = config.OWNER_NAME || 'Marisel';
-        const botName = config.BOT_NAME || '𝖒𝖆𝖗𝖎𝖘𝖊𝖑';
-        const repoLink = config.REPO || 'https://github.com/betingrich4/Mercedes';
+const emojiSets = {
+    reactions: ['⚡', '🚀', '💨', '🎯', '🌟', '💎', '🔥', '✨', '🌀', '🔹'],
+    bars: [
+        '▰▰▰▰▰▰▰▰▰▰',
+        '▰▱▱▱▱▱▱▱▱▱',
+        '▰▰▱▱▱▱▱▱▱▱',
+        '▰▰▰▰▱▱▱▱▱▱',
+        '▰▰▰▰▰▰▱▱▱▱'
+    ],
+    status: [
+        { threshold: 0.3, text: '🚀 Ultra Speed' },
+        { threshold: 0.6, text: '⚡ Fast & Stable' },
+        { threshold: 1.2, text: '⚙️ Running Smooth' },
+        { threshold: Infinity, text: '🐢 Bit Slow' }
+    ]
+};
 
-        // Final output
-        const pingMsg = `
+malvin({
+    pattern: 'ping',
+    alias: ['speed', 'status', 'p'],
+    desc: 'Check AKIDA’s performance and response time',
+    category: 'main',
+    react: '⚡',
+    filename: __filename
+}, async (malvin, mek, m, { from, sender, reply }) => {
+    try {
+        // Start high-resolution timer
+        const start = process.hrtime.bigint();
 
-*${statusText}*
+        const reactionEmoji = emojiSets.reactions[Math.floor(Math.random() * emojiSets.reactions.length)];
+        const loadingBar = emojiSets.bars[Math.floor(Math.random() * emojiSets.bars.length)];
 
-⚡ \`Response Time:\` ${responseTime.toFixed(2)}s
-⏰ \`Time:\` ${time} (${timezone})
-📅 \`Date:\` ${date}
-⏱️ \`Uptime:\` ${uptime}
-💾 \`Memory Usage:\` ${memoryUsage}
-🖥️ \`Node Version:\` ${nodeVersion}
+        await malvin.sendMessage(from, { react: { text: reactionEmoji, key: mek.key } });
 
-💻 \`Developer:\` ${ownerName}
-🤖 \`Bot Name:\` ${botName}
+        // Calculate latency
+        const latency = Number(process.hrtime.bigint() - start) / 1e9;
+        const statusText = emojiSets.status.find(s => latency < s.threshold)?.text || '🐢 Slow';
 
-🌟 Don't forget to *star* & *fork* the repo!
-🔗 ${repoLink}
-
-${loadingBar}
-`.trim();
-
-        // Send message with retry
-        attempts = 0;
-        while (attempts < maxAttempts) {
-            try {
-                await malvin.sendMessage(from, {
-                    text: pingMsg,
-                    contextInfo: {
-                        mentionedJid: [sender],
-                        forwardingScore: 999,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363299029326322@newsletter',
-                            newsletterName: `𝖒𝖆𝖗𝖎𝖘𝖊𝖑`,
-                            serverMessageId: 143
-                        }
-                    }
-                }, { quoted: mek });
-                break;
-            } catch (sendError) {
-                attempts++;
-                if (attempts === maxAttempts) throw new Error('Failed to send message');
-            }
+        // Time + Date
+        const timezone = 'Africa/Nairobi';
+        const cacheKey = `${timezone}:${moment().format('YYYY-MM-DD HH:mm:ss')}`;
+        let time, date;
+        if (formatCache.has(cacheKey)) {
+            ({ time, date } = formatCache.get(cacheKey));
+        } else {
+            time = moment().tz(timezone).format('HH:mm:ss A');
+            date = moment().tz(timezone).format('dddd, MMMM Do YYYY');
+            formatCache.set(cacheKey, { time, date });
+            if (formatCache.size > 100) formatCache.clear();
         }
 
-        // Success reaction
+        // System uptime & memory
+        const uptimeSeconds = Number(process.hrtime.bigint() - botStartTime) / 1e9;
+        const uptime = moment.duration(uptimeSeconds, 'seconds').humanize();
+        const memory = process.memoryUsage();
+        const memoryUsage = `${(memory.heapUsed / 1024 / 1024).toFixed(1)}MB / ${(memory.heapTotal / 1024 / 1024).toFixed(1)}MB`;
+
+        const nodeVersion = process.version;
+
+        // Owner & Bot Info
+        const ownerName = 'GURU';
+        const botName = 'ＡＫＩＤＡ';
+        const repoLink = 'https://github.com/itsguruu/Akida';
+
+        const msg = `
+╔═══『 ⚙️ 𝐀𝐊𝐈𝐃𝐀 𝐒𝐘𝐒𝐓𝐄𝐌 𝐒𝐓𝐀𝐓𝐔𝐒 ⚙️ 』═══╗
+
+👋 ʜᴇʏ *@${sender.split("@")[0]}*
+━━━━━━━━━━━━━━━━━━━━━━━
+🚀 *Status:* ${statusText}
+⚡ *Response:* ${latency.toFixed(2)} s
+🕒 *Time:* ${time}
+📆 *Date:* ${date}
+⏱ *Uptime:* ${uptime}
+💾 *Memory:* ${memoryUsage}
+💻 *Node:* ${nodeVersion}
+━━━━━━━━━━━━━━━━━━━━━━━
+👑 *Owner:* ${ownerName}
+🤖 *Bot:* ${botName}
+🔗 *Repo:* ${repoLink}
+━━━━━━━━━━━━━━━━━━━━━━━
+${loadingBar}
+╚═══════════════════════╝
+> ᴘᴏᴡᴇʀᴇᴅ ʙʏ *ɢᴜʀᴜ ⚡ ＡＫＩＤＡ*
+        `.trim();
+
+        await malvin.sendMessage(from, {
+            text: msg,
+            contextInfo: {
+                mentionedJid: [sender],
+                forwardingScore: 999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363299029326322@newsletter',
+                    newsletterName: 'GURU',
+                    serverMessageId: 143
+                }
+            }
+        }, { quoted: mek });
+
         await malvin.sendMessage(from, { react: { text: '✅', key: mek.key } });
 
     } catch (e) {
         console.error('❌ Ping command error:', e);
-        await reply(`❌ Error: ${e.message || 'Failed to process ping command'}`);
+        await reply(`❌ Error: ${e.message}`);
         await malvin.sendMessage(from, { react: { text: '❌', key: mek.key } });
     }
 });
